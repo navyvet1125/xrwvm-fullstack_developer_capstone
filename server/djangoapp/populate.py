@@ -2,12 +2,13 @@
 
 from .models import CarMake, CarModel
 
+
 def initiate() -> None:
     """Populate the CarMake and CarModel tables with data."""
     # clear the tables
     CarMake.objects.all().delete()
     CarModel.objects.all().delete()
-    
+
     print("Populating CarMake and CarModel data...")
     car_make_data = [
         {
@@ -35,10 +36,10 @@ def initiate() -> None:
 
     car_make_instances = []
     for data in car_make_data:
-            car_make_instances.append(
-                  CarMake.objects.create(name=data['name'],
-                  description=data['description'])
-            )
+        car_make_instances.append(
+            CarMake.objects.create(name=data['name'],
+            description=data['description'])
+        )
 
 
     # Create CarModel instances with the corresponding CarMake instances
@@ -155,11 +156,11 @@ def initiate() -> None:
     ]
     print("Populating CarModel data...")
     for data in car_model_data:
-          CarModel.objects.create(
+        CarModel.objects.create(
             name=data['name'],
             car_make=data['car_make'],
             type=data['type'],
             year=data['year']
-          )
+        )
 
     print("CarMake and CarModel data populated.")
