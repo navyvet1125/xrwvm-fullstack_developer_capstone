@@ -3,13 +3,13 @@
 import logging
 import json
 
-from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponse
+# from django.shortcuts import render
+# from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404, render, redirect
+# from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import logout
-from django.contrib import messages
-from datetime import datetime
+# from django.contrib import messages
+# from datetime import datetime
 
 from django.http import JsonResponse
 from django.contrib.auth import login, authenticate
@@ -46,7 +46,7 @@ def login_user(request) -> JsonResponse:
 def logout_request(request) -> JsonResponse:
     """Logout a user"""
     logout(request)
-    data = {"userName":""}
+    data = {"userName": ""}
     return JsonResponse(data)
 # ...
 
@@ -64,7 +64,7 @@ def registration(request) -> JsonResponse:
     last_name = data['lastName']
     email = data['email']
     username_exist = False
-    email_exist = False
+    # email_exist = False
     try:
         # Check if user already exists
         User.objects.get(username=username)
@@ -79,10 +79,10 @@ def registration(request) -> JsonResponse:
         user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name,password=password, email=email)
         # Login the user and redirect to list page
         login(request, user)
-        data = {"userName":username,"status":"Authenticated"}
+        data = {"userName":username,"status": "Authenticated"}
         return JsonResponse(data)
     else :
-        data = {"userName":username,"error":"Already Registered"}
+        data = {"userName":username,"error": "Already Registered"}
         return JsonResponse(data)
 
 
@@ -105,7 +105,7 @@ def get_dealerships(request, state="All") -> JsonResponse:
     else:
         endpoint = "/fetchDealers/"+state
     dealerships = get_request(endpoint)
-    return JsonResponse({"status":200,"dealers":dealerships})
+    return JsonResponse({"status": 200,"dealers": dealerships})
 
 def get_dealer_reviews(request, dealer_id) -> JsonResponse:
     """Get reviews for a dealer"""
@@ -116,20 +116,20 @@ def get_dealer_reviews(request, dealer_id) -> JsonResponse:
             for review in reviews:
                 response = analyze_review_sentiments(review['review'])
                 review['sentiment'] = response['sentiment']
-            return JsonResponse({"status":200,"reviews":reviews})
+            return JsonResponse({"status": 200,"reviews": reviews})
         except Exception:
-            return JsonResponse({"status":404,"error":"Bad Request"})
+            return JsonResponse({"status": 404,"error": "Bad Request"})
     else:
-        return JsonResponse({"status":404,"error":"Bad Request"})
+        return JsonResponse({"status": 404,"error": "Bad Request"})
 
 def get_dealer_details(request, dealer_id) -> JsonResponse:
     """Get reviews for a dealer"""
     if(dealer_id):
         endpoint = f"/fetchDealer/{dealer_id}"
         dealership = get_request(endpoint)
-        return JsonResponse({"status":200,"dealer":dealership})
+        return JsonResponse({"status": 200,"dealer": dealership})
     else:
-        return JsonResponse({"status":404,"error":"Bad Request"})
+        return JsonResponse({"status": 404,"error": "Bad Request"})
 
 def add_review(request) -> JsonResponse:
     """Add review for a dealer"""
@@ -137,8 +137,8 @@ def add_review(request) -> JsonResponse:
         data = json.loads(request.body)
         try:
             response = post_review(data)
-            return JsonResponse({"status":200, "response":response})
+            return JsonResponse({"status": 200, "response": response})
         except Exception:
-            return JsonResponse({"status":401,"message":"Error in posting review"})
+            return JsonResponse({"status": 401,"message": "Error in posting review"})
     else:
-        return JsonResponse({"status":403,"message":"Unauthorized"})
+        return JsonResponse({"status": 403,"message":" Unauthorized"})
