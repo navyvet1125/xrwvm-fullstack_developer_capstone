@@ -16,7 +16,6 @@ class CarMake(models.Model):
         return f'{self.name}: {self.description}'
 
 
-
 class CarModel(models.Model):
     """Car Model class"""
     car_make = models.ForeignKey(CarMake, on_delete=models.CASCADE)
@@ -44,10 +43,10 @@ class CarModel(models.Model):
         default='SEDAN')
     year = models.IntegerField(default=2023,
         validators=[
-            MinValueValidator(2015), 
+            MinValueValidator(2015),
             MaxValueValidator(2023)
         ])
-    
+
     CAR_STATUS = [
         ('AVAILABLE', 'Available'),
         ('SOLD', 'Sold'),
@@ -55,9 +54,13 @@ class CarModel(models.Model):
         ('IN_TRANSIT', 'In Transit'),
         ('HOLD', 'Hold')
         ]
-    status = models.CharField(null=False, max_length=10, choices=CAR_STATUS, default='AVAILABLE')
+    status = models.CharField(
+        null=False,
+        max_length=10,
+        choices=CAR_STATUS,
+        default='AVAILABLE'
+    )
     dateAdded = models.DateTimeField(default=now, editable=False)
-
 
     def __str__(self):
         return f'{self.year} {self.car_make.name} {self.name} {self.type}'
