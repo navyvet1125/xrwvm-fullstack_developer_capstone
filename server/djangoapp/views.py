@@ -92,10 +92,10 @@ def get_cars(request) -> JsonResponse:
     print(count)
     if(count == 0):
         initiate()
-    car_models = CarModel.objects.select_related('carMake')
+    car_models = CarModel.objects.select_related('car_make')
     cars = []
     for car_model in car_models:
-        cars.append({"CarModel": car_model.name, "CarMake": car_model.carMake.name})
+        cars.append({"CarModel": car_model.name, "CarMake": car_model.car_make.name})
     return JsonResponse({"CarModels":cars})
 
 def get_dealerships(request, state="All") -> JsonResponse:
@@ -107,16 +107,18 @@ def get_dealerships(request, state="All") -> JsonResponse:
     dealerships = get_request(endpoint)
     return JsonResponse({"status":200,"dealers":dealerships})
 
-def get_dealer_reviews(request,dealer_id) -> JsonResponse:
+def get_dealer_reviews(request, dealer_id) -> JsonResponse:
     """Get reviews for a dealer"""
     if(dealer_id):
-        endpoint = f"/fetchReviews/{dealer_id}"
+        endpoint = f"/fetchReviews/dealer/{dealer_id}"
         reviews = get_request(endpoint)
-        for review in reviews:
-            response = analyze_review_sentiments(review['review'])
-            print(response)
-            review['sentiment'] = response['sentiment']
-        return JsonResponse({"status":200,"reviews":reviews})
+        try:
+            for review in reviews:
+                response = analyze_review_sentiments(review['review'])
+                review['sentiment'] = response['sentiment']
+            return JsonResponse({"status":200,"reviews":reviews})
+        except Exception:
+            return JsonResponse({"status":404,"error":"Bad Request"})
     else:
         return JsonResponse({"status":404,"error":"Bad Request"})
 
@@ -135,7 +137,7 @@ def add_review(request) -> JsonResponse:
         data = json.loads(request.body)
         try:
             response = post_review(data)
-            return JsonResponse({"status":200, response:response})
+            return JsonResponse({"status":200, "response":response})
         except Exception:
             return JsonResponse({"status":401,"message":"Error in posting review"})
     else:
