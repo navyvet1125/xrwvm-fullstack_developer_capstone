@@ -16,6 +16,7 @@ class CarMake(models.Model):
         return f'{self.name}: {self.description}'
 
 
+
 class CarModel(models.Model):
     """Car Model class"""
     car_make = models.ForeignKey(CarMake, on_delete=models.CASCADE)
