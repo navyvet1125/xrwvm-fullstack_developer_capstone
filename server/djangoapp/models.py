@@ -42,7 +42,7 @@ class CarModel(models.Model):
         choices=CAR_TYPES,
         default='SEDAN')
     year = models.IntegerField(default=2023,
-        validators=[
+         validators=[
             MinValueValidator(2015),
             MaxValueValidator(2023)
         ])

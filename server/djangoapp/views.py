@@ -42,20 +42,20 @@ def login_user(request) -> JsonResponse:
         data = {"userName": username, "status": "Authenticated"}
     return JsonResponse(data)
 
+
 # Create a `logout_request` view to handle sign out request
 def logout_request(request) -> JsonResponse:
     """Logout a user"""
     logout(request)
     data = {"userName": ""}
     return JsonResponse(data)
-# ...
 
-# Create a `registration` view to handle sign up request
+
 @csrf_exempt
 def registration(request) -> JsonResponse:
     """Register a new user"""
 
-    context = {}
+    # context = {}
 
     data = json.loads(request.body)
     username = data['userName']
@@ -69,7 +69,7 @@ def registration(request) -> JsonResponse:
         # Check if user already exists
         User.objects.get(username=username)
         username_exist = True
-    except:
+    except Exception:
         # If not, simply log this is a new user
         logger.debug("{} is new user".format(username))
 

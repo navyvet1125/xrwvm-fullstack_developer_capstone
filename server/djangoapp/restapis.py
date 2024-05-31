@@ -16,10 +16,10 @@ def get_request(endpoint, **kwargs) -> dict:
     """Function to send get request to backend"""
     params = ""
     if kwargs:
-        for key,value in kwargs.items():
-            params=params+key+"="+value+"&"
+        for key, value in kwargs.items():
+            params = params + key + "=" + value + "&"
 
-    request_url = backend_url+endpoint+"?"+params
+    request_url = backend_url + endpoint + "?" + params
 
     print(f"GET from {request_url} ")
     try:
@@ -49,7 +49,7 @@ def post_review(data_dict) -> dict:
     """Function to send review to backend"""
     request_url = backend_url+"/insert_review"
     try:
-        response = requests.post(request_url,json=data_dict, timeout=30)
+        response = requests.post(request_url, json=data_dict, timeout=30)
         return response.json()
     except Exception:
         print("Network exception occurred")
