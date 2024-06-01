@@ -24,7 +24,7 @@ def get_request(endpoint, **kwargs) -> dict:
     print(f"GET from {request_url} ")
     try:
         # Call get method of requests library with URL and parameters
-        response = requests.get(request_url, timeout=30)
+        response = requests.get(request_url, timeout=90)
         return response.json()
     except Exception as err:
         # If any error occurs
@@ -37,7 +37,7 @@ def analyze_review_sentiments(text) -> dict:
     request_url = sentiment_analyzer_url+"analyze/"+text
     try:
         # Call get method of requests library with URL and parameters
-        response = requests.get(request_url, timeout=30)
+        response = requests.get(request_url, timeout=90)
         return response.json()
     except Exception as err:
         print(f"Unexpected {err=}, {type(err)=}")
@@ -49,7 +49,7 @@ def post_review(data_dict) -> dict:
     """Function to send review to backend"""
     request_url = backend_url+"/insert_review"
     try:
-        response = requests.post(request_url, json=data_dict, timeout=30)
+        response = requests.post(request_url, json=data_dict, timeout=90)
         return response.json()
     except Exception:
         print("Network exception occurred")
