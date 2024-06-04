@@ -25,6 +25,7 @@ const Dealer = () => {
   let post_review = root_url+`postreview/${id}`;
   
   const get_dealer = async ()=>{
+    console.log(dealer_url)
     const res = await fetch(dealer_url, {
       method: "GET"
     });
@@ -73,6 +74,10 @@ return(
       <div style={{marginTop:"10px"}}>
       <h1 style={{color:"grey"}}>{dealer.full_name}{postReview}</h1>
       <h4  style={{color:"grey"}}>{dealer['city']},{dealer['address']}, Zip - {dealer['zip']}, {dealer['state']} </h4>
+      <div className='btn-group' role='group' aria-label='navigation'>
+      <a href={`/searchcars/${id}`} className='btn btn-primary'>Search Cars</a>
+      <a href='/dealers' className='btn btn-primary'>Dealers' List</a> 
+      </div>
       </div>
       <div class="reviews_panel">
       {reviews.length === 0 && unreviewed === false ? (
@@ -85,7 +90,7 @@ return(
           <div className="reviewer">{review.name} {review.car_make} {review.car_model} {review.car_year}</div>
         </div>
       ))}
-    </div>  
+    </div>
   </div>
 )
 }
