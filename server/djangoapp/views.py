@@ -16,7 +16,7 @@ from django.contrib.auth import login, authenticate
 from django.views.decorators.csrf import csrf_exempt
 from .populate import initiate
 from .models import CarMake, CarModel
-from .restapis import get_request, analyze_review_sentiments, post_review
+from .restapis import get_request, analyze_review_sentiments, post_review, search_cars
 
 
 # Get an instance of a logger
@@ -158,3 +158,29 @@ def add_review(request) -> JsonResponse:
             })
     else:
         return JsonResponse({"status": 403, "message": "Unauthorized"})
+
+
+def get_inventory(request, dealer_id) -> JsonResponse:
+    """Get inventory for a dealer"""
+    data = request.GET
+    print(request)
+    print(f"Dealer ID: {dealer_id}")
+
+    if dealer_id:
+        if 'year' in data:
+            endpoint = f"/carsbyyear/{dealer_id}/{data['year']}"
+        elif 'make' in data:
+            endpoint = f"/carsbymake/{dealer_id}/{data['make']}"
+        elif 'model' in data:
+            endpoint = f"/carsbymodel/{dealer_id}/{data['model']}"
+        elif 'mileage' in data:
+            endpoint = f"/carsbymaxmileage/{dealer_id}/{data['mileage']}"
+        elif 'price' in data:
+            endpoint = f"/carsbyprice/{dealer_id}/{data['price']}"
+        else:
+            endpoint = f"/cars/{dealer_id}"
+        print(f"Endpoint: {endpoint}")
+        cars = search_cars(endpoint)
+        return JsonResponse({"status": 200, "cars": cars})
+    else:
+        return JsonResponse({"status": 400, "message": "Bad Request"})
